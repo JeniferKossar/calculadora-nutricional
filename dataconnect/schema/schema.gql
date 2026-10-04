@@ -1,0 +1,51 @@
+type Formula @table {
+  name: String!
+  category: String!
+  type: String!
+  kcal: Float!
+  prot: Float!
+  cho: Float!
+  lip: Float!
+  fibras: Float!
+  lataG: Float
+  refG: Float
+  medidaG: Float
+  diluicao: Float
+  na: Float
+  ca: Float
+  p: Float
+  fe: Float
+  k: Float
+  cl: Float
+}
+
+type Cid @table {
+  cidCode: String!
+  name: String!
+  isRare: Boolean!
+  ptMin: Float!
+  ptMax: Float!
+  pnatMin: Float!
+  pnatMax: Float!
+}
+
+type Patient @table {
+  name: String!
+  birthDate: Date!
+  weight: Float!
+  height: Float!
+  lastConsultation: Date
+}
+
+type Prescription @table {
+  patient: Patient!
+  cid: Cid!
+  date: Date!
+  totalKcal: Float!
+}
+
+type PrescriptionItem @table {
+  prescription: Prescription!
+  formula: Formula!
+  quantity: Float!
+}

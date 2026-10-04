@@ -1,0 +1,57 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function staffProfilePath(uid) {
+      return /databases/$(database)/documents/staff/$(uid);
+    }
+
+    function isApprovedStaff() {
+      return request.auth != null
+        && exists(staffProfilePath(request.auth.uid))
+        && get(staffProfilePath(request.auth.uid)).data.role in ['superadmin', 'admin', 'consultant'];
+    }
+
+    function isSuperAdmin() {
+      return isApprovedStaff()
+        && get(staffProfilePath(request.auth.uid)).data.role == 'superadmin';
+    }
+
+    function canManageClinicalData() {
+      return isApprovedStaff()
+        && get(staffProfilePath(request.auth.uid)).data.role in ['superadmin', 'admin'];
+    }
+
+    match /staff/{userId} {
+      allow get: if request.auth != null
+        && (request.auth.uid == userId || isSuperAdmin());
+      allow list: if isSuperAdmin();
+      allow create: if request.auth != null
+        && request.auth.uid == userId
+        && request.auth.token.email is string
+        && request.auth.token.email.lower().matches('^[^@]+@hpp[.]org[.]br$')
+        && request.resource.data.keys().hasOnly(['email', 'role'])
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.role == 'pending';
+      allow update: if isSuperAdmin()
+        && userId != request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role'])
+        && request.resource.data.role in ['pending', 'admin', 'consultant', 'disabled'];
+      allow delete: if false;
+    }
+
+    match /formulas/{formulaId} {
+      allow read: if isApprovedStaff();
+      allow write: if canManageClinicalData();
+    }
+
+    match /cids/{cidId} {
+      allow read: if isApprovedStaff();
+      allow write: if canManageClinicalData();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,127 @@
+mutation InsertCid @auth(level: USER) {
+  cid_insert(data: { cidCode: "A00.0", name: "Cholera", isRare: false, ptMin: 0.0, ptMax: 10.0, pnatMin: 0.0, pnatMax: 10.0 })
+}
+
+mutation UpdateCid($id: UUID!, $name: String!) @auth(level: USER) {
+  cid_update(id: $id, data: { name: $name })
+}
+
+mutation DeleteCid($id: UUID!) @auth(level: USER) {
+  cid_delete(id: $id)
+}
+
+query GetCid($id: UUID!) @auth(level: PUBLIC, insecureReason: "CIDs are standard medical codes and publicly available information.") {
+  cid(id: $id) {
+    cidCode
+    name
+  }
+}
+
+query ListCids @auth(level: PUBLIC, insecureReason: "CIDs are standard medical codes and publicly available information.") {
+  cids {
+    cidCode
+    name
+  }
+}
+
+mutation InsertFormula @auth(level: USER) {
+  formula_insert(data: { name: "Sample Formula", category: "Standard", type: "Enteral", kcal: 1.0, prot: 0.04, cho: 0.12, lip: 0.04, fibras: 0.01 })
+}
+
+mutation UpdateFormula($id: UUID!, $kcal: Float!) @auth(level: USER) {
+  formula_update(id: $id, data: { kcal: $kcal })
+}
+
+mutation DeleteFormula($id: UUID!) @auth(level: USER) {
+  formula_delete(id: $id)
+}
+
+query GetFormula($id: UUID!) @auth(level: PUBLIC, insecureReason: "Formula nutritional data is public product information.") {
+  formula(id: $id) {
+    name
+    kcal
+  }
+}
+
+query ListFormulas @auth(level: PUBLIC, insecureReason: "Formula nutritional data is public product information.") {
+  formulas {
+    name
+    kcal
+  }
+}
+
+mutation InsertPatient($name: String!, $birthDate: Date!, $weight: Float!, $height: Float!) @auth(level: USER) {
+  patient_insert(data: { name: $name, birthDate: $birthDate, weight: $weight, height: $height })
+}
+
+mutation UpdatePatient($id: UUID!, $weight: Float!) @auth(level: USER) {
+  patient_update(id: $id, data: { weight: $weight })
+}
+
+mutation DeletePatient($id: UUID!) @auth(level: USER) {
+  patient_delete(id: $id)
+}
+
+query GetPatient($id: UUID!) @auth(level: USER) {
+  patient(id: $id) {
+    name
+    weight
+  }
+}
+
+query ListPatients @auth(level: USER) {
+  patients {
+    name
+    birthDate
+  }
+}
+
+mutation CreatePrescription($patientId: UUID!, $cidId: UUID!, $date: Date!, $totalKcal: Float!) @auth(level: USER) {
+  prescription_insert(data: { patientId: $patientId, cidId: $cidId, date: $date, totalKcal: $totalKcal })
+}
+
+mutation UpdatePrescription($id: UUID!, $totalKcal: Float!) @auth(level: USER) {
+  prescription_update(id: $id, data: { totalKcal: $totalKcal })
+}
+
+mutation DeletePrescription($id: UUID!) @auth(level: USER) {
+  prescription_delete(id: $id)
+}
+
+query GetPrescription($id: UUID!) @auth(level: USER) {
+  prescription(id: $id) {
+    totalKcal
+    date
+  }
+}
+
+query ListPrescriptions @auth(level: USER) {
+  prescriptions {
+    date
+    totalKcal
+  }
+}
+
+mutation CreatePrescriptionItem($prescriptionId: UUID!, $formulaId: UUID!, $quantity: Float!) @auth(level: USER) {
+  prescriptionItem_insert(data: { prescriptionId: $prescriptionId, formulaId: $formulaId, quantity: $quantity })
+}
+
+mutation UpdatePrescriptionItem($id: UUID!, $quantity: Float!) @auth(level: USER) {
+  prescriptionItem_update(id: $id, data: { quantity: $quantity })
+}
+
+mutation DeletePrescriptionItem($id: UUID!) @auth(level: USER) {
+  prescriptionItem_delete(id: $id)
+}
+
+query GetPrescriptionItem($id: UUID!) @auth(level: USER) {
+  prescriptionItem(id: $id) {
+    quantity
+  }
+}
+
+query ListPrescriptionItems @auth(level: USER) {
+  prescriptionItems {
+    quantity
+  }
+}

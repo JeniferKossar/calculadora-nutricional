@@ -1,0 +1,25 @@
+mutation SeedDatabase @transaction {
+  patient_insertMany(data: [
+    { name: "Ana Silva", birthDate: "1985-05-15", weight: 65.5, height: 1.65 },
+    { name: "João Santos", birthDate: "1970-11-20", weight: 80.0, height: 1.78 },
+    { name: "Maria Oliveira", birthDate: "1992-02-10", weight: 58.2, height: 1.62 }
+  ])
+  cid_insertMany(data: [
+    { cidCode: "E11", name: "Diabetes Mellitus tipo 2", isRare: false, ptMin: 1500, ptMax: 2000, pnatMin: 1800, pnatMax: 2200 },
+    { cidCode: "E84", name: "Fibrose Cística", isRare: true, ptMin: 2200, ptMax: 3000, pnatMin: 2500, pnatMax: 3500 },
+    { cidCode: "E44", name: "Desnutrição Proteico-Calórica", isRare: false, ptMin: 1200, ptMax: 1600, pnatMin: 1500, pnatMax: 1900 }
+  ])
+  formula_insertMany(data: [
+    { name: "NutriComplete", category: "Enteral", type: "Pó", kcal: 1.5, prot: 0.06, cho: 0.15, lip: 0.08, fibras: 0.015 },
+    { name: "HiperCal", category: "Oral", type: "Líquido", kcal: 2.0, prot: 0.08, cho: 0.20, lip: 0.10, fibras: 0.005 },
+    { name: "IsoProtein", category: "Enteral", type: "Pó", kcal: 1.0, prot: 0.04, cho: 0.12, lip: 0.05, fibras: 0.01 }
+  ])
+  prescription_insertMany(data: [
+    { patientId: "00000000-0000-0000-0000-000000000001", cidId: "00000000-0000-0000-0000-000000000001", date: "2023-10-01", totalKcal: 1800 },
+    { patientId: "00000000-0000-0000-0000-000000000002", cidId: "00000000-0000-0000-0000-000000000002", date: "2023-10-05", totalKcal: 2500 }
+  ])
+  prescriptionItem_insertMany(data: [
+    { prescriptionId: "00000000-0000-0000-0000-000000000001", formulaId: "00000000-0000-0000-0000-000000000001", quantity: 500 },
+    { prescriptionId: "00000000-0000-0000-0000-000000000002", formulaId: "00000000-0000-0000-0000-000000000002", quantity: 800 }
+  ])
+}
