@@ -1,4 +1,4 @@
-# Calculadora Nutricional
+# Calculadora Nutricional - DietCalc Pro
 
 ## O que é a Calculadora Nutricional?
 
@@ -53,7 +53,7 @@ Lista as dependências do projeto e os scripts de execução, como:
 - `npm run build`
 
 ### `.env.local`
-Arquivo local para armazenar variáveis de ambiente do Firebase, como chaves e identificadores do projeto. Não deve ser enviado ao repositório.
+Arquivo local para armazenar variáveis de ambiente do Firebase. **Nunca deve ser enviado ao repositório.**
 
 ## Estrutura de dados no Firebase
 
@@ -71,28 +71,79 @@ A aplicação organiza os usuários em perfis como:
 - `pending` — aguardando aprovação
 - `disabled` — acesso bloqueado
 
-## Como rodar o projeto
+## Como rodar o projeto localmente
 
-```bash
-npm install
-npm run dev
-```
+### Pré-requisitos
+- Node.js 18+
+- npm ou yarn
+- Uma conta Firebase com um projeto configurado
 
-Para gerar a versão de produção:
+### Instalação
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/JeniferKossar/calculadora-nutricional.git
+   cd calculadora-nutricional
+   ```
+
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+
+3. Configure as variáveis de ambiente:
+   ```bash
+   cp .env.example .env.local
+   ```
+   Abra o arquivo `.env.local` e preencha com suas credenciais do Firebase
+
+4. Inicie o servidor de desenvolvimento:
+   ```bash
+   npm run dev
+   ```
+
+### Build para produção
 
 ```bash
 npm run build
 ```
 
-## Configuração mínima do Firebase
+Para visualizar o build:
+```bash
+npm run preview
+```
 
-1. Ativar autenticação por e-mail e senha no Firebase
-2. Criar a conta inicial do superadmin no Authentication
-3. Criar o documento `staff/{UID}` com o papel de superadmin
-4. Publicar as regras do Firestore
-5. Configurar as variáveis de ambiente no `.env.local`
+## Configuração do Firebase
 
-## Observação
+### Primeiros passos
 
-Este README foi simplificado para apresentar a proposta da aplicação e a função de cada arquivo principal, sem excesso de documentação interna.
+1. Crie um projeto no [Firebase Console](https://console.firebase.google.com)
+2. Ative **Authentication > Sign-in method > Email/Password**
+3. Crie uma coleção `staff` no Firestore
+4. Configure as regras de acesso em `firestore.rules`
 
+### Variáveis de ambiente
+
+O arquivo `.env.local` deve conter as credenciais do seu projeto Firebase. Consulte `.env.example` para ver quais variáveis são necessárias.
+
+**IMPORTANTE:** Nunca commite o arquivo `.env.local` ao repositório. Ele contém informações sensíveis.
+
+## Segurança
+
+- Todas as credenciais do Firebase são carregadas de variáveis de ambiente
+- O arquivo `.env.local` está listado no `.gitignore` para proteção
+- As regras do Firestore garantem autorização por perfil de usuário
+- Validações são aplicadas tanto no cliente quanto no servidor (Firestore rules)
+
+## Contribuindo
+
+Se você está trabalhando neste projeto:
+
+1. Nunca commite arquivos `.env.local`, `.env` ou qualquer arquivo com credenciais
+2. Use sempre `.env.example` como referência para configuração local
+3. Revise o `.gitignore` antes de fazer push
+4. Proteja dados pessoais e clínicos em commits e PRs
+
+## Licença
+
+Este projeto é privado e de uso restrito.
