@@ -3,6 +3,10 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { addDoc, collection, deleteDoc, doc, getFirestore, updateDoc } from 'firebase/firestore';
 
+// Firebase configuration is loaded from environment variables
+// See .env.example for required configuration
+// Make sure to create a .env.local file with your Firebase credentials
+// IMPORTANT: Never commit .env.local to version control
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
